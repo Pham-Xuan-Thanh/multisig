@@ -1,11 +1,12 @@
 # staking-contracts
 
-Smart contracts for IBFT PoS
+Smart contracts for IBFT PoS integrated with Beowulf E-chain
+
 
 ## How to start
 
 ```shell
-$ git clone https://github.com/0xPolygon/staking-contracts.git
+$ git clone https://github.com/beowulfchain-lab/evm-staking-contract.git
 $ cd staking-contracts
 $ npm i
 ```
@@ -15,7 +16,16 @@ $ npm i
 ```shell
 $ npm run build
 ```
-
+### Environment Variables
+    Default staking contract address: 0x0000000000000000000000000000000000001001
+ ```shell
+    JSONRPC_URL=http://sc1-testnet.beowulfchain.com:10001
+    PRIVATE_KEYS=0x
+    STAKING_CONTRACT_ADDRESS=0x 
+    VALIDATOR_ADDRESS=0x 
+    MAX_VALIDATOR_COUNT=999999
+    MIN_VALIDATOR_COUNT=0
+ ```
 ### Run unit tests
 
 ```shell
@@ -46,4 +56,8 @@ $ npm run unstake
 
 ```shell
 $ npm run info
+```
+### Allowance stake for another to be validators
+```shell
+$ npm run allowance-stake
 ```
