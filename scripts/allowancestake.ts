@@ -2,7 +2,7 @@ import {ethers} from "hardhat";
 import {Staking} from "../types/Staking";
 
 const STAKING_CONTRACT_ADDRESS = process.env.STAKING_CONTRACT_ADDRESS ?? '';
-const STAKE_AMOUNT = ethers.utils.parseEther("1000000")
+const STAKE_AMOUNT = ethers.utils.parseEther("3000000")
 const VALIDATOR_ACCOUNT = process.env.VALIDATOR_ADDRESS ?? '' ;
 
 
