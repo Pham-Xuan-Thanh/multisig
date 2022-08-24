@@ -12,7 +12,7 @@ const privateKeys = (process.env.PRIVATE_KEYS ?? "000000000000000000000000000000
 const config: HardhatUserConfig = {
   solidity: "0.8.7",
   networks: {
-    polygonedge: {
+    beowulfsmartchain: {
       url: process.env.JSONRPC_URL ?? "http://localhost:10002",
       accounts: [
           ...privateKeys,
@@ -21,7 +21,7 @@ const config: HardhatUserConfig = {
   },
   gasReporter: {
     currency: "EUR",
-    gasPrice: 21
+    gasPrice: 500
   },
   typechain: {
     outDir: "types",

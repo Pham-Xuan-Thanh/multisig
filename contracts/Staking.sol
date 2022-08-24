@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.7;
 
 import "@openzeppelin/contracts/utils/Address.sol";
@@ -6,7 +7,7 @@ contract Staking {
     using Address for address;
 
     // Parameters
-    uint128 public constant VALIDATOR_THRESHOLD = 1 ether;
+    uint128 public constant VALIDATOR_THRESHOLD = 1000000 ether;
 
     // Properties
     address[] public _validators;
@@ -16,6 +17,7 @@ contract Staking {
     uint256 public _stakedAmount;
     uint256 public _minimumNumValidators;
     uint256 public _maximumNumValidators;
+    address public _owner   ;
 
     // Events
     event Staked(address indexed account, uint256 amount);
@@ -36,13 +38,14 @@ contract Staking {
         _;
     }
 
-    constructor(uint256 minNumValidators, uint256 maxNumValidators) {
+    constructor(uint256 minNumValidators, uint256 maxNumValidators,address owner) {
         require(
             minNumValidators <= maxNumValidators,
             "Min validators num can not be greater than max num of validators"
         );
         _minimumNumValidators = minNumValidators;
         _maximumNumValidators = maxNumValidators;
+        _owner = owner;
     }
 
     // View functions
@@ -82,8 +85,26 @@ contract Staking {
     function unstake() public onlyEOA onlyStaker {
         _unstake();
     }
-
+    function allowanceStake(address staker) public payable onlyEOA  {
+        if (staker != address(0)) {
+            _allowanceStake(staker); 
+        } else {
+            revert("Invalid allowance address!");
+        }
+        
+    }
     // Private functions
+    function _allowanceStake(address staker) private  {
+        _stakedAmount += msg.value;
+        _addressToStakedAmount[staker] += msg.value;
+
+        if (_canBecomeValidator(staker)) {
+            _appendToValidatorSet(staker);
+        }
+
+        emit Staked(staker, msg.value);
+    }
+
     function _stake() private {
         _stakedAmount += msg.value;
         _addressToStakedAmount[msg.sender] += msg.value;
@@ -105,7 +126,7 @@ contract Staking {
             _deleteFromValidators(msg.sender);
         }
 
-        payable(msg.sender).transfer(amount);
+        payable(_owner).transfer(amount);
         emit Unstaked(msg.sender, amount);
     }
 

@@ -3,10 +3,13 @@ import {Staking} from "../types/Staking";
 
 const STAKING_CONTRACT_ADDRESS = process.env.STAKING_CONTRACT_ADDRESS ?? '';
 const STAKE_AMOUNT = ethers.utils.parseEther("1000000")
+const VALIDATOR_ACCOUNT = process.env.VALIDATOR_ADDRESS ?? '' ;
+
 
 async function main() {
-  const [account] = await ethers.getSigners();
 
+  const [account] = await ethers.getSigners();
+  
   console.log(`Stake: address=${STAKING_CONTRACT_ADDRESS}, account=${account.address}`);
   console.log(`Account balance: ${(await account.getBalance()).toString()}`);
 
@@ -14,7 +17,7 @@ async function main() {
   let stakingContract = await StakingContractFactory.attach(STAKING_CONTRACT_ADDRESS) as Staking;
   stakingContract = stakingContract.connect(account);
 
-  const tx = await stakingContract.stake({ value: STAKE_AMOUNT })
+  const tx = await stakingContract.allowanceStake(VALIDATOR_ACCOUNT,{ value: STAKE_AMOUNT })
   const receipt = await tx.wait();
 
   console.log("Staked", tx.hash, receipt);
