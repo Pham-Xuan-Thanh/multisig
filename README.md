@@ -1,12 +1,12 @@
 # staking-contracts
 
-Smart contracts for IBFT PoS integrated with Beowulf E-chain
+Smart contracts for Multisign Account. 
 
 
 ## How to start
 
 ```shell
-$ git clone https://github.com/beowulfchain-lab/evm-staking-contract.git
+$ git clone https://github.com/Pham-Xuan-Thanh/multisig.git
 $ cd staking-contracts
 $ npm i
 ```

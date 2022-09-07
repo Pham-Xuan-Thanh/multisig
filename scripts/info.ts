@@ -1,25 +1,33 @@
-import {ethers} from "hardhat";
-import {Staking} from "../types/Staking";
+import {ethers } from "hardhat";
+import { MultiSigWallet} from "../types/MultiSigWallet";
 
-const STAKING_CONTRACT_ADDRESS = process.env.STAKING_CONTRACT_ADDRESS ?? '';
+const MULTISIG_CONTRACT_ADDRESS = process.env.MULTISIG_CONTRACT_ADDRESS ?? '';
 
 async function main() {
   console.log("Check current contract information");
 
-  const StakingContractFactory = await ethers.getContractFactory("Staking");
-  const stakingContract = await StakingContractFactory.attach(STAKING_CONTRACT_ADDRESS) as Staking;
+  const MultisigContractFactory = await ethers.getContractFactory("MultiSigWallet");
+  const multisigContract = await MultisigContractFactory.attach(MULTISIG_CONTRACT_ADDRESS) as MultiSigWallet;
+  
+  const multisigAddress = multisigContract.address
 
-  const [stakedAmount, validators, minimumNumValidators, maximumNumValidators] = await Promise.all([
-    stakingContract.stakedAmount(),
-    stakingContract.validators(),
-    stakingContract.minimumNumValidators(),
-    stakingContract.maximumNumValidators(),
+
+  const [onwers, balance , numofConfirmed, amountTX ] = await Promise.all([
+    multisigContract.getOwners(),
+    multisigContract.provider.getBalance(multisigAddress),
+    multisigContract.numConfirmationsRequired(),
+    multisigContract.getTransactionCount()
   ])
 
-  console.log(`Total staked amount: ${stakedAmount.toString()}`)
-  console.log('Minimum number of validators', minimumNumValidators.toNumber());
-  console.log('Maximum number of validators', maximumNumValidators.toNumber());
-  console.log('Current validators list', validators);
+
+ 
+
+  console.log("========================Multisig Addres:",multisigAddress,"=============================")
+  console.log(`Balance: ${ethers.utils.formatEther(balance)} W`)
+  console.log('Number of owner: ', onwers.length);
+  console.log('Number of Require owner confirmed: ', numofConfirmed.toNumber());
+  console.log('Current owner list', onwers);
+  console.log("with amount of transaction submitted: " , amountTX.toNumber())
 
 }
 

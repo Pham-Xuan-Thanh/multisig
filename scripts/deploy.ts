@@ -1,24 +1,37 @@
 import {ethers} from "hardhat";
 
-const MIN_VALIDATOR_COUNT = process.env.MIN_VALIDATOR_COUNT ?? 1;
-const MAX_VALIDATOR_COUNT = process.env.MAX_VALIDATOR_COUNT ?? Number.MAX_SAFE_INTEGER - 1;
+
+
 
 async function main() {
+
+  
+
+  var listowners = process.argv[2].slice(1,-1).split(",")
+  var required = process.argv[3]
   const [deployer] = await ethers.getSigners();
 
-  if (MIN_VALIDATOR_COUNT > MAX_VALIDATOR_COUNT) {
-    console.log("MIN_VALIDATOR_COUNT can not be greater than MAX_VALIDATOR_COUNT")
-    return
+  try {
+    listowners.map(owner => {
+      if ( !ethers.utils.isAddress(owner)) 
+      {
+        throw new Error("Invalid address!!! : " + owner);
+        
+      }
+    } )
+  } catch (error) {
+    console.log("Invalid owner address: " ,error)
+    return 
   }
-
+  
+ 
   console.log("Deploying contracts with the account:", deployer.address);
-  console.log("Account balance:", (await deployer.getBalance()).toString());
 
-  const StakingContractFactory = await ethers.getContractFactory("Staking");
+  const WalletContractFactory = await ethers.getContractFactory("MultiSigWallet");
 
-  const stakingContract = await StakingContractFactory.deploy(MIN_VALIDATOR_COUNT, MAX_VALIDATOR_COUNT);
+  const walletContract = await WalletContractFactory.deploy(listowners, required);
 
-  console.log("Contract address:", stakingContract.address);
+  console.log("Contract address:", walletContract.address);
 }
 
 main()

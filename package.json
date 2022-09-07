@@ -6,9 +6,12 @@
   "repository": "https://github.com/0xPolygon/staking-contracts.git",
   "scripts": {
     "build": "npm run clean && npm run compile",
-    "deploy": "hardhat run scripts/deploy.ts --network beowulfsmartchain",
-    "stake": "hardhat run scripts/stake.ts --network beowulfsmartchain",
-    "allowance-stake":"hardhat run scripts/allowancestake.ts --network beowulfsmartchain ",
+    "deploy": "hardhat multisig scripts/deploy.ts --network beowulfsmartchain",
+    "submit-tx": "hardhat multisig scripts/submit-tx.ts --network beowulfsmartchain",
+    "confirm-tx": "hardhat multisig scripts/confirm-tx.ts --network beowulfsmartchain",
+    "revoke-tx": "hardhat multisig scripts/revoke-tx.ts --network beowulfsmartchain",
+    "execute-tx": "hardhat multisig scripts/execute-tx.ts --network beowulfsmartchain",
+    "txinfo": "hardhat multisig scripts/txinfo.ts --network beowulfsmartchain",
     "transfer": "hardhat run scripts/transfer.ts --network beowulfsmartchain",
     "unstake": "hardhat run scripts/unstake.ts --network beowulfsmartchain",
     "info": "hardhat run scripts/info.ts --network beowulfsmartchain",
@@ -20,6 +23,7 @@
   "dependencies": {
     "dotenv": "^10.0.0",
     "ethers": "^5.4.5",
+    "fs-extra": "^10.1.0",
     "hardhat": "^2.6.1",
     "web3": "^1.5.2"
   },
@@ -30,6 +34,7 @@
     "@typechain/ethers-v5": "^7.0.1",
     "@typechain/hardhat": "^2.3.0",
     "@types/chai": "^4.2.21",
+    "@types/fs-extra": "^9.0.13",
     "@types/mocha": "^9.0.0",
     "@types/node": "^16.7.1",
     "chai": "^4.3.4",
